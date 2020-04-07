@@ -7,7 +7,7 @@ win1=0
 win2=0
 numTimeout=0
 
-TIMEOUT=5
+TIMEOUT=10
 SAFETY_MARGIN=1 
 
 def getMove(p,color):
@@ -84,7 +84,7 @@ def playSingleGame(alternative=False):
     print(winner, istimeout)
     return result,istimeout
 
-def playGames(numGame=10):
+def playGames(numGame=5):
     global win1,win2,numTimeout
     for i in range(0,numGame):
         if(i<numGame/2):

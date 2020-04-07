@@ -1,0 +1,4 @@
+player 1: flat_mc_player/nogo_flat_mc.py
+player 2: nogo4/nogo.py
+player 1 wins 0
+player 2 wins 1

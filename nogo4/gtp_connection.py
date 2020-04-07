@@ -233,6 +233,29 @@ class GtpConnection():
     def handler(self,signum, frame):
         raise TimeoutError
 
+    def simulate(self, board,color): 
+        current_player = board.current_player
+        moves = GoBoardUtil.generate_legal_moves(board, current_player)
+        if len(moves) == 0:
+            return 3-current_player
+        move=np.random.choice(moves)
+        board.board[move] = current_player
+        board.current_player = 3-current_player
+        return self.simulate(board,color)
+
+
+
+    def RandomMove(self, board, color):
+
+        wins = 0
+        for _ in range(self._timelimit//2):
+            temp = board.copy()
+            result = self.simulate(temp,color)
+            if result == color:
+                wins += 1
+        return wins
+
+
     def solve(self, return_val=False):
 
         try:
@@ -249,6 +272,24 @@ class GtpConnection():
             
             signal.signal(signal.SIGALRM, self.handler)
             signal.alarm(self._timelimit)
+
+            if len(moves) >= 14:
+                Tboard = self.board.copy()          
+                moveWins = []
+                for move in moves:
+                    Tboard.board[move] = color
+                    Tboard.current_player = 3-color
+                    wins = self.RandomMove(Tboard,color)
+                    moveWins.append(wins)
+                    Tboard = self.board.copy()
+                max_child = np.argmax(moveWins)
+                signal.alarm(0)
+                print("done")
+                return moves[max_child]
+                
+
+
+
             
             for move in moves:
                 tempboard.board[move] = color
